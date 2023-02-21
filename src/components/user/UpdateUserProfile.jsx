@@ -6,6 +6,8 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { updateUser } from '../../redux/slice/userSlice'
 import { GrPowerReset } from 'react-icons/gr'
 import { logOut } from '../../redux/slice/publicSlice'
+import { unwrapResult } from '@reduxjs/toolkit'
+import { toast } from 'react-toastify'
 
 function GetOrUpdateUser() {
 
@@ -38,10 +40,11 @@ function GetOrUpdateUser() {
         if (userId) {
             //update
             dispatch(updateUser({ userId: userId, userInfo: userInfo }))
+                .then(unwrapResult)
                 .then(() => {
                     dispatch(logOut())
                     navigate('/signin')
-                })
+                }).catch(error => toast.error(error.message))
         }
     }
 

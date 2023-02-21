@@ -8,6 +8,7 @@ import { TbCurrencyRupee } from 'react-icons/tb'
 import { GrPowerReset } from 'react-icons/gr'
 import { BsSave2 } from 'react-icons/bs'
 import { toast } from 'react-toastify';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 function SaveOrUpdateProduct() {
 
@@ -49,10 +50,19 @@ function SaveOrUpdateProduct() {
         const product = { productName, productDescription, productWeight, productCode, productPrice, productTotalQuantityAvailable, subCategoryName: subCat };
         if (productId)
             //Update
-            dispatch(updateProduct({ productId: productId, product: product, file: file })).then(() => navigate("/admin/dashboard/product"), toast.success(`Product Updated Successfuly`))
+            dispatch(updateProduct({ productId: productId, product: product, file: file }))
+                .then(unwrapResult)
+                .then(() => {
+                    toast.success(`Product Updated Successfuly`)
+                    navigate("/admin/dashboard/product")
+                }).catch(error => toast.error(error.message))
         else
-            dispatch(addProduct({ product: product, file: file })).then(() => navigate("/admin/dashboard/product"))
-
+            dispatch(addProduct({ product: product, file: file }))
+                .then(unwrapResult)
+                .then(response => {
+                    toast.success(`${response.productName} added successfully`)
+                    navigate("/admin/dashboard/product")
+                }).catch(error => toast.error(error.message))
     }
 
     const clearForm = (e) => {

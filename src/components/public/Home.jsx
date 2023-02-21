@@ -10,6 +10,7 @@ import { addProductToWishList, removeProductFromWishList } from '../../redux/sli
 import { RiHeart2Fill, RiHeart2Line } from 'react-icons/ri'
 import FilterNav from './FilterNav'
 import CategoryFilterNav from './CategoryFilterNav'
+import { unwrapResult } from '@reduxjs/toolkit'
 //import { FcShop } from 'react-icons/fc'
 
 function Home() {
@@ -24,13 +25,22 @@ function Home() {
     useEffect(() => {
         document.title = "Products"
         dispatch(getAllProducts())
+            .then(unwrapResult)
+            .catch(error => toast.error(error.message))
         dispatch(getAllSubCategory())
+            .then(unwrapResult)
+            .catch(error => toast.error(error.message))
         dispatch(getAllCategories())
+            .then(unwrapResult)
+            .catch(error => toast.error(error.message))
     }, [dispatch])
 
     const addProductToCart = (productId) => {
         if (login === true) {
             dispatch(addToCart({ shoppingCartId: cart.shoppingCartId, productId: productId }))
+                .then(unwrapResult)
+                .then(() => toast.success(`Product Added To Cart Successfully`))
+                .catch(error => toast.error(error.message))
         } else {
             toast.warning("Please Sign In !!!!!")
             navigate('/signin')
@@ -40,13 +50,17 @@ function Home() {
     const removeProductFromCart = (productId) => {
         const obj = cart.cartItems.find(c => c.productId === productId)
         dispatch(removeCartItem({ shoppingCartId: cart.shoppingCartId, cartItemsId: obj.cartItemsId }))
+            .then(unwrapResult)
+            .catch(error => toast.error(error.message))
     }
 
     const addToWishList = (productId) => {
         if (login === true) {
             const addorRemoveProductDTO = { wishListId: wishlist.wishListId, productId }
             dispatch(addProductToWishList({ addorRemoveProductDTO }))
+                .then(unwrapResult)
                 .then(() => toast.success("Product Added To WishList"))
+                .catch(error => toast.error(error.message))
         } else {
             toast.warning("Please Sign In !!!!!")
             navigate('/signin')
@@ -56,7 +70,9 @@ function Home() {
     const removeFromWishList = (productId) => {
         const addorRemoveProductDTO = { wishListId: wishlist.wishListId, productId }
         dispatch(removeProductFromWishList({ addorRemoveProductDTO }))
+            .then(unwrapResult)
             .then(() => toast.success('Product Removed From Wishlist'))
+            .catch(error => toast.error(error.message))
     }
 
     //height={"250"} width={"420"} tabindex="-1"

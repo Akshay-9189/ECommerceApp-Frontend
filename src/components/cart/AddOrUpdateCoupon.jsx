@@ -5,6 +5,8 @@ import { createCoupon, updateCoupon } from '../../redux/slice/cartSlice'
 import { BsSave2 } from 'react-icons/bs'
 import { GrPowerReset, GrDocumentUpdate } from 'react-icons/gr'
 import { IoArrowBack } from 'react-icons/io5'
+import { unwrapResult } from '@reduxjs/toolkit'
+import { toast } from 'react-toastify'
 
 function AddOrUpdateCoupon() {
 
@@ -29,11 +31,21 @@ function AddOrUpdateCoupon() {
     const AddOrUpdateCoupon = (e) => {
         e.preventDefault()
         const coupon = { couponName, discount, description }
-        if (couponId) {
-            dispatch(updateCoupon({ couponId: couponId, coupon: coupon })).then(() => navigate('/admin/dashboard/coupon'))
-        } else {
-            dispatch(createCoupon(coupon)).then(() => navigate('/admin/dashboard/coupon'))
-        }
+        if (couponId)
+            dispatch(updateCoupon({ couponId: couponId, coupon: coupon }))
+                .then(unwrapResult)
+                .then(response => {
+                    toast.success(`Coupon ${response.couponName} Is Update Successfully`)
+                    navigate('/admin/dashboard/coupon')
+                }).catch(error => toast.error(error.message))
+        else
+            dispatch(createCoupon(coupon))
+                .then(unwrapResult)
+                .then(response => {
+                    toast.success(`Coupon ${response.couponName} is added successfully`)
+                    navigate('/admin/dashboard/coupon')
+                }).catch(error => toast.error(error.message))
+
     }
 
     const clearForm = (e) => {

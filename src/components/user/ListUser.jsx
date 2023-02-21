@@ -5,6 +5,8 @@ import { deleteUser, getAllUsers } from '../../redux/slice/userSlice'
 import { GrDocumentUpdate, GrView } from 'react-icons/gr'
 import { RiDeleteBinLine } from 'react-icons/ri'
 import { IoArrowBack } from 'react-icons/io5'
+import { unwrapResult } from '@reduxjs/toolkit'
+import { toast } from 'react-toastify'
 
 function ListUser() {
 
@@ -14,11 +16,20 @@ function ListUser() {
     useEffect(() => {
         document.title = "User List"
         dispatch(getAllUsers())
+            .then(unwrapResult)
+            .catch(error => toast.error(error.message))
     }, [dispatch])
 
     // const changeRole = (userId) => {
     //     dispatch(changeUserRole({ userId }))
     // }
+
+    const removeUser = (userId) => {
+        dispatch(deleteUser({ userId: userId }))
+            .then(unwrapResult)
+            .then(response => toast.success(`${response.userFirstName} is Deleted`))
+            .catch(errro => toast.error(errro.message))
+    }
 
     return (
         <div className=''>
@@ -53,7 +64,7 @@ function ListUser() {
                                                     <Link className='btn btn-secondary hover' to={`${us.userId}`}><GrView /> View</Link>
                                                     {/* <button className='btn btn-primary hover' onClick={() => changeRole(us.userId)}><GrUserAdmin /> UpdateRole</button> */}
                                                     <Link className='btn btn-warning hover' to={`updateUser/${us.userId}`}><GrDocumentUpdate /> Update</Link>
-                                                    <button className='btn btn-danger hover' onClick={() => dispatch(deleteUser({ userId: us.userId }))}><RiDeleteBinLine /> Delete</button>
+                                                    <button className='btn btn-danger hover' onClick={() => removeUser(us.userId)}><RiDeleteBinLine /> Delete</button>
                                                 </div>
                                             </td>
                                         </tr>

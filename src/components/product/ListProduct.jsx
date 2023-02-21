@@ -8,6 +8,7 @@ import { GrDocumentUpdate, GrView } from 'react-icons/gr'
 import { RiDeleteBinLine } from 'react-icons/ri'
 import { TbCurrencyRupee } from 'react-icons/tb'
 import { toast } from 'react-toastify'
+import { unwrapResult } from '@reduxjs/toolkit'
 
 function ListProduct() {
 
@@ -18,6 +19,13 @@ function ListProduct() {
         document.title = "Manage Products"
         dispatch(getAllProducts())
     }, [dispatch])
+
+    const removeProduct = (productId) => {
+        dispatch(deleteProduct({ productId: productId }))
+            .then(unwrapResult)
+            .then(() => toast.success(`Product Deleted Successfully`))
+            .catch(error => toast.error(error.message))
+    }
 
     return (
         <div className='container'>
@@ -63,8 +71,7 @@ function ListProduct() {
                                                                 <div className='d-grid gap-2 d-xxl-flex justify-content-center'>
                                                                     <Link className='btn btn-secondary ' to={`${prod.productId}`}><GrView /> View</Link>
                                                                     <Link className='btn btn-warning' to={`update/${prod.productId}`}><GrDocumentUpdate />Update</Link>
-                                                                    <button className='btn btn-danger' onClick={() => dispatch(deleteProduct({ productId: prod.productId }))
-                                                                        .then(() => toast.success(`Product Deleted Successfully`))}><RiDeleteBinLine />Delete
+                                                                    <button className='btn btn-danger' onClick={() => removeProduct(prod.productId)}><RiDeleteBinLine />Delete
                                                                     </button>
                                                                 </div>
                                                             </td>

@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import ProductService from "../../services/ProductService"
 import CategoryService from "../../services/CategoryService";
 import SubCategoryService from "../../services/SubCategoryService";
-import { toast } from "react-toastify";
 
 // ----------------------------------------------------------------- Product Actions -------------------------------------------------------------------------
 
@@ -199,7 +198,6 @@ const categorySlice = createSlice({
         },
 
         [addProduct.fulfilled]: (state, action) => {
-            toast.success(`${action.payload.productName} added successfully`)
             return { ...state, products: [...state.products, action.payload] }
         },
 
@@ -255,7 +253,6 @@ const categorySlice = createSlice({
         // ============================================================= Category Sucess Request ===================================================================================
 
         [saveCategory.fulfilled]: (state, action) => {
-            toast.success(`${action.payload.categoryName} added Successfully`)
             return { ...state, category: [...state.category, action.payload] }
         },
 
@@ -275,7 +272,6 @@ const categorySlice = createSlice({
 
 
         [saveSubCategory.fulfilled]: (state, action) => {
-            toast.success(`${action.payload.subCategoryName} added sucessfully`)
             return { ...state, subCategory: [...state.subCategory, action.payload] }
         },
 
@@ -293,115 +289,6 @@ const categorySlice = createSlice({
 
         [deleteSubCategory.fulfilled]: (state, action) => {
             return { ...state, subCategory: state.subCategory.filter(({ subCategoryId }) => subCategoryId !== action.payload) }
-        },
-
-
-        // ************************************************************************* Product Rejected Request ***********************************************************************
-
-        [getAllProducts.rejected]: (action) => {
-            return toast.error(action.error.message)
-        },
-
-        [getProductByID.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [deleteProduct.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [updateProduct.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [addProduct.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [reduceTotalQuantity.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [filterProductbySubCatName.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [getByProductName.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [filterProductByPrice.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [sortProductByNameAscending.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [sortProductByNameDescending.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [filterProductBelowPrice.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [filterProductAbovePrice.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [sortByProductPriceAscending.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [sortByProductPriceDescending.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [filterProductByProductName.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-
-        // ************************************************************************ Category Rejected Request *************************************************************************
-
-        [saveCategory.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [updateCategory.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [getAllCategories.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [deleteCategory.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-
-        // ****************************************************************** Sub Category Rejected Request ***************************************************************************
-
-        [saveSubCategory.rejected]: (state, action) => {
-            return toast.error(action.error.messsge)
-        },
-
-        [updateSubCategory.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [getSubCategorybyName.rejected]: (action) => {
-            return toast.error(action.error.message)
-        },
-
-        [getAllSubCategory.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [deleteSubCategory.rejected]: (state, action) => {
-            return toast.error(action.error.message)
         }
     }
 })

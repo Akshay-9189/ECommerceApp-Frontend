@@ -9,6 +9,7 @@ import { GrPowerReset, GrDocumentUpdate } from 'react-icons/gr'
 import { BsSave2 } from 'react-icons/bs'
 import { toast } from 'react-toastify'
 import { getAllOrders } from '../../redux/slice/orderSlice'
+import { unwrapResult } from '@reduxjs/toolkit'
 
 function ListCategory() {
 
@@ -19,6 +20,8 @@ function ListCategory() {
 
     useEffect(() => {
         dispatch(getAllCategories())
+            .then(unwrapResult)
+            .catch(error => toast.error(error.message))
     }, [dispatch])
 
 
@@ -33,22 +36,37 @@ function ListCategory() {
         const category = { categoryName }
         if (categoryId) {
             dispatch(updateCategory({ categoryId: categoryId, category: category }))
-                .then(() => toast.success("Category Updated Successfully"))
+                .then(unwrapResult)
+                .then(response => toast.success(`Category ${response.categoryName} Updated Successfully`))
+                .catch(error => toast.error(error.message))
         } else {
             dispatch(saveCategory(category))
-            setCategoryName('')
+                .then(unwrapResult)
+                .then(response => {
+                    toast.success(`${response.categoryName} added Successfully`)
+                    setCategoryName('')
+                }).catch(error => toast.error(error.message))
         }
     }
 
     const removeCategory = (categoryId) => {
         dispatch(deleteCategory({ categoryId: categoryId }))
+            .then(unwrapResult)
             .then(() => {
                 toast.success("Category Deleted Successfully")
                 dispatch(getAllProducts())
+                    .then(unwrapResult)
+                    .catch(error => toast.error(error.message))
                 dispatch(getAllOrders())
+                    .then(unwrapResult)
+                    .catch(error => toast.error(error.message))
                 dispatch(getAllSubCategory())
+                    .then(unwrapResult)
+                    .catch(error => toast.error(error.message))
                 dispatch(getAllCategories())
-            })
+                    .then(unwrapResult)
+                    .catch(error => toast.error(error.message))
+            }).catch(error => toast.error(error.message))
     }
 
     //col-lg-6 col-md-11 col-12

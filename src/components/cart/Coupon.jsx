@@ -1,5 +1,7 @@
+import { unwrapResult } from '@reduxjs/toolkit'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 import { addCouponToCart, getAllCoupons } from '../../redux/slice/cartSlice'
 
 function Coupon({ shopCartId }) {
@@ -11,7 +13,16 @@ function Coupon({ shopCartId }) {
     useEffect(() => {
         document.title = "Shopping Cart"
         dispatch(getAllCoupons())
+            .then(unwrapResult)
+            .catch(error => toast.error(error.message))
     }, [dispatch])
+
+    const addCoupToCart = () => {
+        dispatch(addCouponToCart({ shoppingCartId: shopCartId, couponName: couponName }))
+            .then(unwrapResult)
+            .then(response => toast.success(`Coupon ${response.coupon.couponName} is added to cart`))
+            .catch(error => toast.error(error.message))
+    }
 
     return (
         <div className="mt-3 shadow-lg">
@@ -58,7 +69,7 @@ function Coupon({ shopCartId }) {
                             </div>
                         </div>
                         <div className='d-flex justify-content-around align-items-center'>
-                            <button className='btn btn-sm btn-success' onClick={() => dispatch(addCouponToCart({ shoppingCartId: shopCartId, couponName: couponName }))}>Apply</button>
+                            <button className='btn btn-sm btn-success' onClick={() => addCoupToCart()}>Apply</button>
                             <button className='btn btn-sm btn-danger' onClick={() => setCouponName('')}>Clear</button>
                         </div>
                     </div>

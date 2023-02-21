@@ -8,6 +8,8 @@ import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai'
 import { BiErrorAlt } from 'react-icons/bi'
 import { VscClearAll } from 'react-icons/vsc'
 import { TbCurrencyRupee } from 'react-icons/tb'
+import { unwrapResult } from '@reduxjs/toolkit'
+import { toast } from 'react-toastify'
 
 function ShoppingCart() {
 
@@ -19,6 +21,9 @@ function ShoppingCart() {
     const clearAllProducts = () => {
         const ids = cart.map(id => id.cartItemsId)
         dispatch(removeAll({ shoppingCartId: shopCart.shoppingCartId, cartIds: ids }))
+            .then(unwrapResult)
+            .then(() => toast.success('All Items Are Removed From Cart'))
+            .catch(error => toast.error(error.message))
     }
 
     // Product Info
@@ -44,6 +49,25 @@ function ShoppingCart() {
             default:
                 return null
         }
+    }
+
+    const removeProductFromCart = (cartItemsId) => {
+        dispatch(removeCartItem({ shoppingCartId: shopCart.shoppingCartId, cartItemsId: cartItemsId }))
+            .then(unwrapResult)
+            .then(() => toast.success('Product Remove From Cart Successfully'))
+            .catch(error => toast.error(error.message))
+    }
+
+    const increaseProductQuantityinCart = (productId) => {
+        dispatch(increaseProductQuantityInCart({ shoppingCartId: shopCart.shoppingCartId, productId: productId }))
+            .then(unwrapResult)
+            .catch(error => toast.error(error.message))
+    }
+
+    const decreaseProductQuantityinCart = (cartItemsId) => {
+        dispatch(reduceProductQuantity({ shoppingCartId: shopCart.shoppingCartId, cartItemsId: cartItemsId }))
+            .then(unwrapResult)
+            .catch(error => toast.error(error.message))
     }
 
     // style = {{maxWidth: "200px", maxHeight: "200px" }}
@@ -93,7 +117,7 @@ function ShoppingCart() {
                                                         <ul className="pagination justify-content-end " style={{ position: "relative" }}>
                                                             <li className="page-item">
                                                                 <button className="btn btn-success page-link  btn-sm "
-                                                                    onClick={() => dispatch(increaseProductQuantityInCart({ shoppingCartId: shopCart.shoppingCartId, productId: crt.productId }))}>
+                                                                    onClick={() => increaseProductQuantityinCart(crt.productId)}>
                                                                     <AiOutlinePlus />
                                                                 </button>
                                                             </li>
@@ -104,7 +128,7 @@ function ShoppingCart() {
                                                             </li>
                                                             <li className="page-item">
                                                                 <button className="btn btn-danger page-link  btn-sm "
-                                                                    onClick={() => dispatch(reduceProductQuantity({ shoppingCartId: shopCart.shoppingCartId, cartItemsId: crt.cartItemsId }))}>
+                                                                    onClick={() => decreaseProductQuantityinCart(crt.cartItemsId)}>
                                                                     <AiOutlineMinus />
                                                                 </button>
                                                             </li>
@@ -115,7 +139,7 @@ function ShoppingCart() {
                                                     <div className="col-7 d-flex justify-content-start gap-4">
                                                         <p>
                                                             <button className="btn btn-danger btn-sm "
-                                                                onClick={() => dispatch(removeCartItem({ shoppingCartId: shopCart.shoppingCartId, cartItemsId: crt.cartItemsId }))} >
+                                                                onClick={() => removeProductFromCart(crt.cartItemsId)} >
                                                                 <RiDeleteBin6Line />
                                                             </button>
                                                         </p>

@@ -1,8 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import WishlistSevice from "../../services/WishlistSevice";
-import { toast } from "react-toastify";
-
-// ====================================================================== Initial State =================================================================================
 
 const initialState = {
     wishlist: {
@@ -11,8 +8,6 @@ const initialState = {
         productList: [{}]
     }
 }
-
-// ***************************************************************************** Actions ***********************************************************************************
 
 export const createNewWishList = createAsyncThunk("Wishlist/New", async ({ newWishlistDTO }) => {
     const response = await WishlistSevice.createNewWishList(newWishlistDTO)
@@ -50,8 +45,6 @@ const wishlistSlice = createSlice({
 
     extraReducers: {
 
-        // ----------------------------------------------------------------- Wishlist Success Request --------------------------------------------------------------------------------
-
         [createNewWishList.fulfilled]: (state, action) => {
             return { ...state, wishlist: action.payload }
         },
@@ -70,29 +63,6 @@ const wishlistSlice = createSlice({
 
         [clearWishList.fulfilled]: (state, action) => {
             return { ...state, wishlist: action.payload }
-        },
-
-
-        // ----------------------------------------------------------------- Wishlist Rejected Request --------------------------------------------------------------------------------
-
-        [createNewWishList.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [addProductToWishList.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [removeProductFromWishList.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [getWishList.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [clearWishList.rejected]: (state, action) => {
-            return toast.error(action.error.message)
         }
     }
 })

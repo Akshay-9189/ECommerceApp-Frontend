@@ -1,5 +1,7 @@
+import { unwrapResult } from '@reduxjs/toolkit'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 import { filterProductbySubCatName, getAllProducts } from '../../redux/slice/categorySlice'
 
 function CategoryFilterNav() {
@@ -7,10 +9,22 @@ function CategoryFilterNav() {
     const dispatch = useDispatch()
     const { category, subCategory } = useSelector(state => state.categoryData)
 
+    const getAllProd = () => {
+        dispatch(getAllProducts())
+            .then(unwrapResult)
+            .catch(error => toast.error(error.message))
+    }
+
+    const filterProdbySubCatName = (subCategoryName) => {
+        dispatch(filterProductbySubCatName({ subCategoryName: subCategoryName }))
+            .then(unwrapResult)
+            .catch(error => toast.error(error.message))
+    }
+
     return (
         <nav className="navbar navbar-expand-lg shadow" style={{ backgroundColor: 'azure' }}>
             <div className="container-fluid">
-                <h3 className="navbar-brand mx-auto my-0" onClick={() => dispatch(getAllProducts())}>Categories</h3>
+                <h3 className="navbar-brand mx-auto my-0" onClick={() => getAllProd()}>Categories</h3>
                 <button className="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar1" aria-controls="offcanvasNavbar1" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
@@ -38,7 +52,7 @@ function CategoryFilterNav() {
                                                                         {
                                                                             cat.categoryId === sub.category.categoryId ? (
                                                                                 <li>
-                                                                                    <button className="btn dropdown-item" onClick={() => dispatch(filterProductbySubCatName({ subCategoryName: sub.subCategoryName }))}>
+                                                                                    <button className="btn dropdown-item" onClick={() => filterProdbySubCatName(sub.subCategoryName)}>
                                                                                         {sub.subCategoryName}
                                                                                     </button>
                                                                                 </li>

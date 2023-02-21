@@ -1,5 +1,7 @@
+import { unwrapResult } from '@reduxjs/toolkit';
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 import { filterProductAbovePrice, filterProductBelowPrice, filterProductByPrice, filterProductByProductName, getAllProducts, sortByProductPriceAscending, sortByProductPriceDescending, sortProductByNameAscending, sortProductByNameDescending } from '../../redux/slice/categorySlice';
 
 function FilterNav() {
@@ -16,10 +18,55 @@ function FilterNav() {
         setMin('')
     }
 
+    const actionDispatcher = (key) => {
+
+        switch (key) {
+
+            case 'allproduct':
+                dispatch(getAllProducts()).then(unwrapResult).catch(error => toast.error(error.message))
+                break;
+
+            case 'filterbyPName':
+                dispatch(filterProductByProductName({ productName: prodName })).then(unwrapResult).then(() => setProdName('')).catch(error => toast.error(error.message))
+                break;
+
+            case 'filterProdbyBP':
+                dispatch(filterProductBelowPrice({ price: belowPrice })).then(unwrapResult).then(() => setBelowPeice('')).catch(error => toast.error(error.message))
+                break;
+
+            case 'filterProdbyAP':
+                dispatch(filterProductAbovePrice({ price: abovePrice })).then(unwrapResult).then(() => setAbovePrice('')).catch(error => toast.error(error.message))
+                break;
+
+            case 'filterProinBetPr':
+                dispatch(filterProductByPrice({ minPrice: min, maxPrice: max })).then(unwrapResult).then(() => clearPrice()).catch(error => toast.error(error.message))
+                break;
+
+            case 'sortProdNaAsc':
+                dispatch(sortProductByNameAscending()).then(unwrapResult).catch(error => toast.error(error.message))
+                break;
+
+            case 'sortProdNaDes':
+                dispatch(sortProductByNameDescending()).then(unwrapResult).catch(error => toast.error(error.message))
+                break;
+
+            case 'sortProdPriAsc':
+                dispatch(sortByProductPriceAscending()).then(unwrapResult).catch(error => toast.error(error.message))
+                break;
+
+            case 'sortProdPriDes':
+                dispatch(sortByProductPriceDescending()).then(unwrapResult).catch(error => toast.error(error.message))
+                break;
+
+            default:
+                break;
+        }
+    }
+
     return (
         <nav className="navbar navbar-expand-lg shadow" style={{ backgroundColor: 'azure' }}>
             <div className="container-fluid">
-                <h3 className="navbar-brand mx-auto my-0" onClick={() => dispatch(getAllProducts())}>Filter</h3>
+                <h3 className="navbar-brand mx-auto my-0" onClick={() => actionDispatcher('allproduct')}>Filter</h3>
                 <button className="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarr" aria-controls="offcanvasNavbarr" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
@@ -43,7 +90,7 @@ function FilterNav() {
                                                 />
                                                 <label htmlFor="floatingInput">Product Name</label>
                                                 <div className='d-flex gap-3 mt-2 justify-content-center'>
-                                                    <button className="btn btn-success" onClick={() => dispatch(filterProductByProductName({ productName: prodName })).then(() => setProdName(''))}>Search</button>
+                                                    <button className="btn btn-success" onClick={() => actionDispatcher('filterbyPName')}>Search</button>
                                                     <button className='btn btn-danger' onClick={() => setProdName('')}>Clear</button>
                                                 </div>
                                             </div>
@@ -63,7 +110,7 @@ function FilterNav() {
                                                 />
                                             </div>
                                             <div className='d-flex gap-3 justify-content-center mt-3'>
-                                                <button className='btn btn-success' onClick={() => dispatch(filterProductBelowPrice({ price: belowPrice })).then(() => setBelowPeice(''))}>Find</button>
+                                                <button className='btn btn-success' onClick={() => actionDispatcher('filterProdbyBP')}>Find</button>
                                                 <button className='btn btn-danger' onClick={() => setBelowPeice('')}>Clear</button>
                                             </div>
                                         </li>
@@ -76,7 +123,7 @@ function FilterNav() {
                                                 />
                                             </div>
                                             <div className='d-flex gap-3 justify-content-center mt-3'>
-                                                <button className='btn btn-success' onClick={() => dispatch(filterProductAbovePrice({ price: abovePrice })).then(() => setAbovePrice(''))}>Find</button>
+                                                <button className='btn btn-success' onClick={() => actionDispatcher('filterProdbyAP')}>Find</button>
                                                 <button className='btn btn-danger' onClick={() => setAbovePrice('')}>Clear</button>
                                             </div>
                                         </li>
@@ -88,7 +135,7 @@ function FilterNav() {
                                                 <input className="form-control me-2" type="number" value={max} onChange={(e) => setMax(e.target.value)} placeholder="Max Price" aria-label="max" />
                                             </div>
                                             <div className='d-flex justify-content-center gap-3 mt-3'>
-                                                <button className="btn btn-success" onClick={() => dispatch(filterProductByPrice({ minPrice: min, maxPrice: max })).then(() => clearPrice())} >Find</button>
+                                                <button className="btn btn-success" onClick={() => actionDispatcher('filterProinBetPr')} >Find</button>
                                                 <button className='btn btn-danger' onClick={() => clearPrice()}>Clear</button>
                                             </div>
                                         </li>
@@ -100,8 +147,8 @@ function FilterNav() {
                                     </button>
                                     <ul className="dropdown-menu mt-2 bg-light">
                                         <li>
-                                            <button className='btn' onClick={() => dispatch(sortProductByNameAscending())}>Ascending Order</button>
-                                            <button className='btn' onClick={() => dispatch(sortProductByNameDescending())}>Descending Order</button>
+                                            <button className='btn' onClick={() => actionDispatcher('sortProdNaAsc')}>Ascending Order</button>
+                                            <button className='btn' onClick={() => actionDispatcher('sortProdNaDes')}>Descending Order</button>
                                         </li>
                                     </ul>
                                 </li>
@@ -111,8 +158,8 @@ function FilterNav() {
                                     </button>
                                     <ul className="dropdown-menu mt-2 bg-light">
                                         <li>
-                                            <button className='btn' onClick={() => dispatch(sortByProductPriceAscending())}>Ascending Order</button>
-                                            <button className='btn' onClick={() => dispatch(sortByProductPriceDescending())}>Descending Order</button>
+                                            <button className='btn' onClick={() => actionDispatcher('sortProdPriAsc')}>Ascending Order</button>
+                                            <button className='btn' onClick={() => actionDispatcher('sortProdPriDes')}>Descending Order</button>
                                         </li>
                                     </ul>
                                 </li>

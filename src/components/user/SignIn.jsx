@@ -5,6 +5,8 @@ import { signIn } from '../../redux/slice/publicSlice'
 import { GrPowerReset } from 'react-icons/gr'
 import { IoArrowBack } from 'react-icons/io5'
 import { FaSignInAlt } from 'react-icons/fa'
+import { unwrapResult } from '@reduxjs/toolkit'
+import { toast } from 'react-toastify'
 
 function SignIn() {
 
@@ -17,12 +19,14 @@ function SignIn() {
         e.preventDefault()
         const jwtRequest = { userEmail, userPassword }
         dispatch(signIn(jwtRequest))
-            .then((response) => {
-                if (response.payload.userInfo.roles === 'USER')
+            .then(unwrapResult)
+            .then(response => {
+                toast.success(`Welcome To Shop ${response.userInfo.userFirstName}`)
+                if (response.userInfo.roles === 'USER')
                     navigate('/')
-                else if (response.payload.userInfo.roles === 'ADMIN')
+                else if (response.userInfo.roles === 'ADMIN')
                     navigate('/admin')
-            })
+            }).catch(error => toast.error(error.message))
     }
 
     const clearForm = () => {

@@ -9,6 +9,7 @@ import { BsSave2 } from 'react-icons/bs'
 import { RiDeleteBinLine } from 'react-icons/ri'
 import { toast } from 'react-toastify'
 import { getAllOrders } from '../../redux/slice/orderSlice'
+import { unwrapResult } from '@reduxjs/toolkit'
 
 function ListSubCategory() {
 
@@ -34,30 +35,41 @@ function ListSubCategory() {
 
     const addOrUpdateSubCategory = () => {
         const saveSubCategoryDTO = { subCategoryName, categoryName: categoryName }
-        if (subCategoryId) {
+        if (subCategoryId)
             dispatch(updateSubCategory({ saveSubCategoryDTO: saveSubCategoryDTO, subCategoryId: subCategoryId }))
+                .then(unwrapResult)
                 .then(() => {
                     setSubCategoryName('')
                     setCategoryName('')
                     toast.success('Sub Category Updated Successsfully')
-                })
-        } else {
+                }).catch(error => toast.error(error.message))
+        else
             dispatch(saveSubCategory(saveSubCategoryDTO))
-                .then(() => {
+                .then(unwrapResult)
+                .then(response => {
+                    toast.success(`${response.subCategoryName} added sucessfully`)
                     setSubCategoryName('')
                     setCategoryName('')
-                })
-        }
+                }).catch(error => toast.error(error.message))
+
+
     }
 
     const removeSubCategory = (subCategoryId) => {
         dispatch(deleteSubCategory({ subCategoryId: subCategoryId }))
+            .then(unwrapResult)
             .then(() => {
                 toast.success("Sub Category Deleted Successully")
                 dispatch(getAllProducts())
+                    .then(unwrapResult)
+                    .catch(error => toast.error(error.message))
                 dispatch(getAllOrders())
+                    .then(unwrapResult)
+                    .catch(error => toast.error(error.message))
                 dispatch(getAllSubCategory())
-            })
+                    .then(unwrapResult)
+                    .catch(error => toast.error(error.message))
+            }).catch(error => toast.error(error.message))
     }
 
     const onClearFun = () => {

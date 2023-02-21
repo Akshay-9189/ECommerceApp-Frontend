@@ -6,6 +6,8 @@ import { MdOutlineAddCircleOutline } from 'react-icons/md'
 import { IoArrowBack } from 'react-icons/io5'
 import { GrDocumentUpdate } from 'react-icons/gr'
 import { RiDeleteBinLine } from 'react-icons/ri'
+import { unwrapResult } from '@reduxjs/toolkit'
+import { toast } from 'react-toastify'
 
 function ListCoupon() {
 
@@ -15,7 +17,17 @@ function ListCoupon() {
     useEffect(() => {
         document.title = "Manage Coupon"
         dispatch(getAllCoupons())
+            .then(unwrapResult)
+            .catch(error => toast.error(error.message))
     }, [dispatch])
+
+
+    const removeCoupon = (couponId) => {
+        dispatch(deleteCoupon({ couponId: couponId }))
+            .then(unwrapResult)
+            .then(response => toast.success(`Coupon  ${response.couponName} is deleted succssfully`))
+            .catch(error => toast.error(error.message))
+    }
 
     return (
         <div className='container'>
@@ -59,7 +71,7 @@ function ListCoupon() {
                                                     <td>
                                                         <div className='d-grid gap-3 d-md-flex justify-content-center'>
                                                             <Link className='btn btn-warning ' to={`${c.couponId}`}><GrDocumentUpdate />  Update</Link>
-                                                            <button className='btn btn-danger ' onClick={() => dispatch(deleteCoupon({ couponId: c.couponId }))}><RiDeleteBinLine />  Delete</button>
+                                                            <button className='btn btn-danger ' onClick={() => removeCoupon(c.couponId)}><RiDeleteBinLine />  Delete</button>
                                                         </div>
                                                     </td>
                                                 </tr>

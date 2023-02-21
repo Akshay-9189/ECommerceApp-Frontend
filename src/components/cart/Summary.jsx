@@ -7,6 +7,8 @@ import { reduceTotalQuantity } from '../../redux/slice/categorySlice'
 import { TbCurrencyRupee } from 'react-icons/tb'
 import { RiSecurePaymentLine } from 'react-icons/ri'
 import { MdDeleteForever, MdKeyboardBackspace } from 'react-icons/md'
+import { unwrapResult } from '@reduxjs/toolkit'
+import { toast } from 'react-toastify'
 
 function Summary() {
     const cart = useSelector(state => state.cartData.shoppingCart.cartItems)
@@ -15,10 +17,22 @@ function Summary() {
 
     const acceptOrder = () => {
         dispatch(createOrder({ userId: shopCart.userId }))
+            .then(unwrapResult)
+            .then(() => toast.success("Order Accepted Successfully"))
+            .catch(error => toast.error(error.message))
         cart.map(cart => ({ productId: cart.productId, productSelectedQuantity: cart.productSelectedQuantity }))
             .forEach(prod => {
                 dispatch(reduceTotalQuantity({ productId: prod.productId, productSelectedQuantity: prod.productSelectedQuantity }))
+                    .then(unwrapResult)
+                    .catch(error => toast.error(error.message))
             });
+    }
+
+    const removeCouponFromCart = () => {
+        dispatch(deleteCouponFromCart({ shoppingCartId: shopCart.shoppingCartId }))
+            .then(unwrapResult)
+            .then(() => toast.success('Coupon Removed From Cart'))
+            .catch(error => toast.error(error.message))
     }
 
     return (
@@ -41,7 +55,7 @@ function Summary() {
                             <p>{shopCart.coupon !== null ? shopCart.coupon.couponName : null}</p>
                         </div>
                         <div className='d-flex justify-content-center mb-2'>
-                            <button className='btn btn-sm btn-outline-danger py-0' onClick={() => dispatch(deleteCouponFromCart({ shoppingCartId: shopCart.shoppingCartId }))}>
+                            <button className='btn btn-sm btn-outline-danger py-0' onClick={() => removeCouponFromCart()}>
                                 <MdDeleteForever /> Remove Coupon
                             </button>
                         </div>

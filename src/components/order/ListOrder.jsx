@@ -5,6 +5,8 @@ import { filterOrderByCurrentDate, filterOrderByProductName, filterOrderByUserId
 import { useState } from 'react'
 import { TbCurrencyRupee } from 'react-icons/tb'
 import { IoArrowBack } from 'react-icons/io5'
+import { unwrapResult } from '@reduxjs/toolkit'
+import { toast } from 'react-toastify'
 //import { AiOutlineCloseCircle } from 'react-icons/ai'
 
 function ListOrder() {
@@ -34,6 +36,8 @@ function ListOrder() {
 
     const filterByProductName = (productName) => {
         dispatch(filterOrderByProductName({ productName }))
+            .then(unwrapResult)
+            .catch(error => toast.error(error.message))
         //  setName(productName)
     }
 
@@ -43,6 +47,31 @@ function ListOrder() {
     //     setUserId('')
     // }
 
+    const getAllOrder = () => {
+        dispatch(getAllOrders())
+            .then(unwrapResult)
+            .catch(error => toast.error(error.message))
+    }
+
+    const filterByCurrentDate = () => {
+        dispatch(filterOrderByCurrentDate())
+            .then(unwrapResult)
+            .catch(error => toast.error(error.message))
+    }
+
+    const getOrderDescending = () => {
+        dispatch(getReverseOrder())
+            .then(unwrapResult)
+            .catch(error => toast.error(error.message))
+    }
+
+    const filterByUserId = () => {
+        dispatch(filterOrderByUserId({ userId: userId }))
+            .then(unwrapResult)
+            .then(() => setUserId(''))
+            .catch(error => toast.error(error.message))
+    }
+
     return (
         <div className='card shadow-lg col-md-12 col-lg-10 col-12 col-xxl-9 mx-auto' style={{ backgroundColor: "linen" }}>
             <h4 className='card-title display-6 text-center mb-0 mt-1'>Orders</h4>
@@ -50,17 +79,17 @@ function ListOrder() {
             <div className='card-body' >
                 <ul className="nav mb-4 gap-2 mx-auto shadow" style={{ backgroundColor: 'lightcyan' }}>
                     <li className="nav-item" >
-                        <button className=' btn' onClick={() => dispatch(getAllOrders())}><strong>Filter: </strong></button>
+                        <button className=' btn' onClick={() => getAllOrder()}><strong>Filter: </strong></button>
                     </li>
-                    <li className='nav-item btn' onClick={() => dispatch(filterOrderByCurrentDate())} style={{ color: 'darkmagenta' }}>Today's Orders</li>
+                    <li className='nav-item btn' onClick={() => filterByCurrentDate()} style={{ color: 'darkmagenta' }}>Today's Orders</li>
                     <li className="nav-item" >
                         <div className="dropdown">
                             <button className="btn  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{ color: 'darkmagenta' }}>
                                 All Orders
                             </button>
                             <ul className="dropdown-menu">
-                                <li className='dropdown-item' onClick={() => dispatch(getAllOrders())}>Latest Orders</li>
-                                <li className='dropdown-item' onClick={() => dispatch(getReverseOrder())}>Old Orders</li>
+                                <li className='dropdown-item' onClick={() => getAllOrder()}>Latest Orders</li>
+                                <li className='dropdown-item' onClick={() => getOrderDescending()}>Old Orders</li>
                             </ul>
                         </div>
                     </li>
@@ -94,7 +123,7 @@ function ListOrder() {
                                 <li className='d-flex flex-column gap-3 pt-2' >
                                     <input type="text" name="userId" className='ps-2' value={userId} onChange={(e) => setUserId(e.target.value)} />
                                     <div className='d-flex gap-2 justify-content-center'>
-                                        <button className='btn btn-success btn-sm' onClick={() => dispatch(filterOrderByUserId({ userId: userId })).then(() => setUserId(''))}>Search</button>
+                                        <button className='btn btn-success btn-sm' onClick={() => filterByUserId()}>Search</button>
                                         <button className='btn btn-danger btn-sm' onClick={() => setUserId('')}>Reset</button>
                                     </div>
                                 </li>

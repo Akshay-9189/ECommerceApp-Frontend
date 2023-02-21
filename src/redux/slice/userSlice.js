@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { toast } from "react-toastify"
 import PublicService from "../../services/PublicService"
 import UserService from "../../services/UserService"
 
@@ -68,48 +67,19 @@ const userSlice = createSlice({
         },
 
         [deleteUser.fulfilled]: (state, action) => {
-            toast.success(`${action.payload.userFirstName} is Deleted !!!!!!!`)
             return { userInfo: state.userInfo.filter(({ userId }) => userId !== action.payload.userId) }
         },
 
         [updateUser.fulfilled]: (state, action) => {
-            toast.success(`${action.payload.userFirstName} is Updated !!!!!!`)
             return { ...state, userInfo: state.userInfo.map(user => user.userId === action.payload.userId ? action.payload : user) }
         },
 
         [signUp.fulfilled]: (state, action) => {
-            toast.success('Sign Up Successfully')
             return { userInfo: [...state.userInfo, action.payload] }
         },
 
         [changeUserRole.fulfilled]: (state, action) => {
             return { ...state, userInfo: state.userInfo.map(user => user.userId === action.payload.userId ? action.payload : user) }
-        },
-
-        // Rejected Request
-
-        [getAllUsers.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [getUserByID.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [deleteUser.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [updateUser.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [signUp.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [changeUserRole.rejected]: (state, action) => {
-            return toast.error(action.error.message)
         }
     }
 })

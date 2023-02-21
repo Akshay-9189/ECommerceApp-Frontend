@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { toast } from "react-toastify"
 import PublicService from "../../services/PublicService"
 
 const initailStatee = {
@@ -35,23 +34,17 @@ const loginSlice = createSlice({
         checkUser: () => {
             const userInfo = JSON.parse(localStorage.getItem("user"))
             const jwtToken = JSON.parse(localStorage.getItem("token"))
-            if (userInfo && jwtToken) {
+            if (userInfo && jwtToken)
                 return { login: true, jwtRequest: { jwtToken, userInfo } }
-            } else {
+            else
                 return initailStatee
-            }
         }
     },
 
     extraReducers: {
 
         [signIn.fulfilled]: (state, action) => {
-            toast.success(`Welcome To Shop ${action.payload.userInfo.userFirstName}`)
             return { login: true, jwtRequest: action.payload }
-        },
-
-        [signIn.rejected]: (state, action) => {
-            return toast.error(action.error.message)
         }
     }
 })

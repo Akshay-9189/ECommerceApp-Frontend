@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { toast } from "react-toastify"
 import OrderService from "../../services/OrderService"
 
 const initialState = {
@@ -60,10 +59,7 @@ const orderSlice = createSlice({
 
     extraReducers: {
 
-        // Success Request
-
         [createOrder.fulfilled]: (state, action) => {
-            toast.success("Order Accepted Successfully")
             return { orderDetails: [...state.orderDetails, ...action.payload.map(ord => ord.orderDetails)] }
         },
 
@@ -92,36 +88,6 @@ const orderSlice = createSlice({
 
         [getOrderById.fulfilled]: (state, action) => {
             return { ...state, orderDetails: [state.orderDetails.find(({ orderId }) => orderId === action.payload.orderId)] }
-        },
-
-        // Rejected Request
-
-        [createOrder.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [getAllOrders.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [getReverseOrder.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [filterOrderByCurrentDate.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [filterOrderByProductName.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [filterOrderByUserId.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [getOrderById.rejected]: (state, action) => {
-            return toast.error(action.error.message)
         }
     }
 })

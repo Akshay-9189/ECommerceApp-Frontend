@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import CouponService from "../../services/CouponService"
 import CartService from "../../services/CartService"
-import { toast } from 'react-toastify'
 
 const initialStatee = {
     shoppingCart: {
@@ -20,7 +19,6 @@ const initialStatee = {
         description: ''
     }]
 }
-
 
 
 //***************************************************************************** SHOPPING CART ACTIONS ***********************************************************************
@@ -98,6 +96,7 @@ export const getAllCoupons = createAsyncThunk("Coupon/GetAll", async () => {
 
 const cartSlice = createSlice({
     name: "Cart",
+
     initialState: initialStatee,
 
     reducers: {
@@ -113,7 +112,6 @@ const cartSlice = createSlice({
         },
 
         [addToCart.fulfilled]: (state, action) => {
-            toast.success(` Product Added To Cart Successfully`)
             const payload = action.payload
             const getProd = payload.cart.cartItems.find(({ productId }) => productId === payload.productId)
             return {
@@ -137,7 +135,6 @@ const cartSlice = createSlice({
         },
 
         [removeCartItem.fulfilled]: (state, action) => {
-            toast.success('Product Remove From Cart Successfully')
             const payload = action.payload
             return {
                 ...state, shoppingCart: {
@@ -164,7 +161,6 @@ const cartSlice = createSlice({
         },
 
         [removeAll.fulfilled]: (state, action) => {
-            toast.success('All Items Are Removed From Cart')
             const payload = action.payload
             return {
                 ...state, shoppingCart: {
@@ -176,7 +172,6 @@ const cartSlice = createSlice({
 
         [addCouponToCart.fulfilled]: (state, action) => {
             const payload = action.payload
-            toast.success(`Coupon ${payload.coupon.couponName} Is Added To Cart`)
             return {
                 ...state, shoppingCart: {
                     ...state.shoppingCart, coupon: payload.coupon, grandTotalAfterDiscount: payload.grandTotalAfterDiscount, savedAmount: payload.savedAmount
@@ -185,7 +180,6 @@ const cartSlice = createSlice({
         },
 
         [deleteCouponFromCart.fulfilled]: (state, action) => {
-            toast.success('Coupon Removed From Cart')
             const payload = action.payload
             return {
                 ...state, shoppingCart: {
@@ -197,7 +191,6 @@ const cartSlice = createSlice({
         //---------------------------------------------------------------------- COUPON SUCESS REQUEST ----------------------------------------------------------------------
 
         [createCoupon.fulfilled]: (state, action) => {
-            toast.success(`Coupon ${action.payload.couponName} Is Added Successfully`)
             return { ...state, coupons: [...state.coupons, action.payload] }
         },
 
@@ -206,73 +199,15 @@ const cartSlice = createSlice({
         },
 
         [updateCoupon.fulfilled]: (state, action) => {
-            toast.success(`Coupon ${action.payload.couponName} Is Update Successfully`)
             return { ...state, coupons: state.coupons.map(coupon => coupon.couponId === action.payload.couponId ? action.payload : coupon) }
         },
 
         [deleteCoupon.fulfilled]: (state, action) => {
-            toast.success(`Coupon  ${action.payload.couponName} Is Deleted Succssfully`)
             return { ...state, coupons: state.coupons.filter(({ couponId }) => couponId !== action.payload.couponId) }
         },
 
         [getAllCoupons.fulfilled]: (state, action) => {
             return { ...state, coupons: action.payload }
-        },
-
-        //------------------------------------------------------------------ SHOPPING CART REJECTED REQUEST ------------------------------------------------------------------
-
-        [createCart.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [addToCart.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [increaseProductQuantityInCart.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [removeCartItem.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [reduceProductQuantity.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [removeAll.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [addCouponToCart.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [deleteCouponFromCart.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        //-------------------------------------------------------------------- COUPON REJECTED REQUEST --------------------------------------------------------------------
-
-        [createCoupon.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [getCoupon.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [updateCoupon.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [deleteCoupon.rejected]: (state, action) => {
-            return toast.error(action.error.message)
-        },
-
-        [getAllCoupons.rejected]: (state, action) => {
-            return toast.error(action.error.message)
         }
     }
 })

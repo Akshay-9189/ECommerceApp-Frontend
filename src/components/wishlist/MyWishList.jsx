@@ -9,6 +9,7 @@ import { BsCartPlus, BsCartX } from 'react-icons/bs'
 import { RiDeleteBinLine } from 'react-icons/ri'
 import { VscClearAll } from 'react-icons/vsc'
 import { IoArrowBack } from 'react-icons/io5'
+import { unwrapResult } from '@reduxjs/toolkit'
 
 function MyWishList() {
 
@@ -21,6 +22,9 @@ function MyWishList() {
     const addProductToCart = (productId) => {
         if (user === true) {
             dispatch(addToCart({ shoppingCartId: cart.shoppingCartId, productId: productId }))
+                .then(unwrapResult)
+                .then(() => toast.success(` Product Added To Cart Successfully`))
+                .catch(error => toast.error(error.message))
         } else {
             toast.warning("Please Log In !!!!!")
             navigate('/signin')
@@ -30,18 +34,24 @@ function MyWishList() {
     const removeProductFromCart = (productId) => {
         const obj = cart.cartItems.find(c => c.productId === productId)
         dispatch(removeCartItem({ shoppingCartId: cart.shoppingCartId, cartItemsId: obj.cartItemsId }))
+            .then(unwrapResult)
+            .catch(error => toast.error(error.message))
     }
 
     const removeFromWishList = (productId) => {
         const addorRemoveProductDTO = { wishListId: wishlist.wishListId, productId }
         dispatch(removeProductFromWishList({ addorRemoveProductDTO }))
+            .then(unwrapResult)
             .then(() => toast.success('Product Removed From Wishlist'))
+            .catch(error => toast.error(error.message))
     }
 
     const removeAllProductsFromWishlist = () => {
         const ids = wishlist.productList.map(obj => obj.productId)
         dispatch(clearWishList({ wishListId: wishlist.wishListId, productIds: ids }))
+            .then(unwrapResult)
             .then(() => toast.success("All Products Removed From Wishlist"))
+            .catch(error => toast.error(error.message))
     }
 
     return (

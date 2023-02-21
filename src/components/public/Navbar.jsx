@@ -13,6 +13,7 @@ import { AiOutlineForm } from 'react-icons/ai'
 import { FcShop } from 'react-icons/fc'
 import { BsCart4 } from 'react-icons/bs'
 import { RiDashboardLine } from 'react-icons/ri'
+import { unwrapResult } from '@reduxjs/toolkit';
 
 function Navbar() {
 
@@ -32,7 +33,11 @@ function Navbar() {
       if (jwtRequest.userInfo.roles === "ADMIN") {
         setAdmin(true)
         dispatch(getAllUsers())
+          .then(unwrapResult)
+          .catch(error => toast.error(error.message))
         dispatch(getAllOrders())
+          .then(unwrapResult)
+          .catch(error => toast.error(error.message))
       }
     }
   }, [logIn, login, dispatch, jwtRequest.userInfo.roles, jwtRequest.userInfo.userFirstName])
@@ -40,7 +45,11 @@ function Navbar() {
   useEffect(() => {
     if (logIn && jwtRequest.userInfo.roles === "USER") {
       dispatch(createCart({ userId: jwtRequest.userInfo.userId }))
+        .then(unwrapResult)
+        .catch(error => toast.error(error.message))
       dispatch(createNewWishList({ newWishlistDTO: { userId: jwtRequest.userInfo.userId } }))
+        .then(unwrapResult)
+        .catch(error => toast.error(error.message))
     }
   }, [logIn, dispatch, jwtRequest.userInfo.userId, jwtRequest.userInfo.roles])
 

@@ -6,6 +6,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { signUp, updateUser } from '../../redux/slice/userSlice'
 import { GrPowerReset } from 'react-icons/gr'
 import { MdOutlineAppRegistration } from 'react-icons/md'
+import { unwrapResult } from '@reduxjs/toolkit'
+import { toast } from 'react-toastify'
 
 function SignUpOrUpdateUser() {
 
@@ -40,10 +42,18 @@ function SignUpOrUpdateUser() {
         if (userId) {
             //update
             dispatch(updateUser({ userId: userId, userInfo: userInfo }))
-                .then(() => navigate('/admin/dashboard/user'))
+                .then(unwrapResult)
+                .then(response => {
+                    navigate('/admin/dashboard/user')
+                    toast.success(`${response.userFirstName} is Updated `)
+                }).catch(error => toast.error(error.message))
         } else {
             dispatch(signUp(userInfo))
-                .then(() => navigate('/signin'))
+                .then(unwrapResult)
+                .then(() => {
+                    navigate('/signin')
+                    toast.success('Sign Up Successfully')
+                }).catch(error => toast.error(error.message))
         }
     }
 
