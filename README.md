@@ -2,7 +2,8 @@
 
 
 ## Software Required 
-1. [VS Code](https://code.visualstudio.com/)
+1. [Node JS](https://nodejs.org/en/download)
+2. [VS Code](https://code.visualstudio.com/)
 
 
 ## Steps To Start Project
@@ -11,7 +12,7 @@
 2.  Open new terminal shortcut key - 
     ### Ctrl + `  
     and type ` npm install ` + press Enter
-3.  Then type  ` npm start ` + press Enter to start project
+3.  To start application type  ` npm start ` + press Enter to start project
     
     **Note: Please note that server running on [http://localhost:8000](http://localhost:8000)**
 
