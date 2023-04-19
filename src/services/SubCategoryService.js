@@ -1,30 +1,25 @@
 import axios from "axios"
-
-const APPLICATION_BASE_URL = 'http://localhost:9002/sub-category/'
+import { productService } from "../constants"
 
 class SubCategoryService {
     saveSubCategory(saveSubCategoryDTO) {
-        return axios.post(APPLICATION_BASE_URL + 'save', saveSubCategoryDTO)
+        return axios.post(productService.SUBCATEGORY + '/save', saveSubCategoryDTO)
     }
 
     updateSubCategory(saveSubCategoryDTO, subCategoryId) {
-        return axios.put(APPLICATION_BASE_URL + 'update/' + subCategoryId, saveSubCategoryDTO)
+        return axios.put(productService.SUBCATEGORY + `/update/${subCategoryId}`, saveSubCategoryDTO)
     }
 
     getSubCategryByName(subCategoryName) {
-        return axios.get(APPLICATION_BASE_URL + 'get-sub-category-by-name/' + subCategoryName)
+        return axios.get(productService.SUBCATEGORY + `/get-sub-category-by-name/${subCategoryName}`)
     }
 
     getAllSubCategory() {
-        return axios.get(APPLICATION_BASE_URL)
+        return axios.get(productService.SUBCATEGORY + '/')
     }
 
-    // getAllSubCategory() {
-    //     return axios.get(APPLICATION_BASE_URL + 'get-all-subcategories')
-    // }
-
     deleteSubCategory(subCategoryId) {
-        return axios.delete(APPLICATION_BASE_URL + 'delete-sub-category/' + subCategoryId)
+        return axios.delete(productService.SUBCATEGORY + `/delete-sub-category/${subCategoryId}`)
     }
 }
 export default new SubCategoryService()

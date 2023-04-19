@@ -10,15 +10,9 @@
   background-color: #70ffc3;
 }
 
-/* .footer {
-  position: relative;
-  bottom: 0;
-  width: 100%;
-  height: 40px;
-  background-color: #99f5e0;
-  text-align: center;
-  color: rgb(152, 204, 172);
-} */
+::-webkit-scrollbar {
+  display: none;
+}
 
 .footer {
   background-color: rgb(215, 240, 217);
@@ -35,8 +29,6 @@
 .custom-tooltip {
   --bs-tooltip-bg: var(--bs-primary);
 }
-
-
 
 
 /* ************************************* */

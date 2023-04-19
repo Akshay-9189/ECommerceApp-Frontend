@@ -1,28 +1,26 @@
 import axios from "axios";
-import AuthHeader from "./AuthHeader";
-
-const USER_SERVICE = "http://localhost:9001/user/";
+import { userService } from "../constants";
 
 class UserService {
 
     getAllUsers() {
-        return axios.get(USER_SERVICE, { headers: AuthHeader() })
+        return axios.get(userService.USER + '/')
     }
 
     deleteUser(userId) {
-        return axios.delete(USER_SERVICE + "delete/" + userId, { headers: AuthHeader() })
+        return axios.delete(userService.USER + `/delete/${userId}`)
     }
 
     getUser(userId) {
-        return axios.get(USER_SERVICE + "get/" + userId, { headers: AuthHeader() })
+        return axios.get(userService.USER + `/get/${userId}`)
     }
 
     updateUser(userId, userInfo) {
-        return axios.put(USER_SERVICE + "update/" + userId, userInfo, { headers: AuthHeader() })
+        return axios.put(userService.USER + `/update/${userId}`, userInfo)
     }
 
     changeUserRole(userId) {
-        return axios.patch(USER_SERVICE + "change-role/" + userId, { headers: AuthHeader() })
+        return axios.patch(userService.USER + `/change-role/${userId}`)
     }
 }
 

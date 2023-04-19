@@ -1,27 +1,26 @@
 import axios from "axios"
-
-const WISHLIST_SERVICE = 'http://localhost:9005/wishlist/'
+import { wishListService } from "../constants"
 
 class WishlistService {
 
     createNewWishList(newWishlistDTO) {
-        return axios.post(WISHLIST_SERVICE + 'save', newWishlistDTO)
+        return axios.post(wishListService.WISHLIST + '/save', newWishlistDTO)
     }
 
     addProductToWishList(addorRemoveProductDTO) {
-        return axios.post(WISHLIST_SERVICE + 'add-product', addorRemoveProductDTO)
+        return axios.post(wishListService.WISHLIST + '/add-product', addorRemoveProductDTO)
     }
 
     removeProductFromWishList(addorRemoveProductDTO) {
-        return axios.post(WISHLIST_SERVICE + 'remove-product', addorRemoveProductDTO)
+        return axios.post(wishListService.WISHLIST + '/remove-product', addorRemoveProductDTO)
     }
 
     getWishList(wishListId) {
-        return axios.get(WISHLIST_SERVICE + 'get/' + wishListId)
+        return axios.get(wishListService.WISHLIST + `/get/${wishListId}`)
     }
 
     clearWishList(wishListId, productIds) {
-        return axios.delete(WISHLIST_SERVICE + 'remove-all/' + wishListId + '/' + productIds)
+        return axios.delete(wishListService.WISHLIST + `/remove-all/${wishListId}/${productIds}`)
     }
 }
 export default new WishlistService()

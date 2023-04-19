@@ -1,35 +1,34 @@
 import axios from "axios"
-
-const APPLICATION_BASE_URL = 'http://localhost:9004/order/'
+import { orderService } from "../constants"
 
 class OrderService {
 
     createOrder(userId) {
-        return axios.post(APPLICATION_BASE_URL + 'create-order/' + userId)
+        return axios.post(orderService.ORDER + `/create-order/${userId}`)
     }
 
     getAllOrder() {
-        return axios.get(APPLICATION_BASE_URL)
+        return axios.get(orderService.ORDER + '/')
     }
 
     getReverseOrder() {
-        return axios.get(APPLICATION_BASE_URL + "reverse")
+        return axios.get(orderService.ORDER + "/reverse")
     }
 
     filterByProductName(productName) {
-        return axios.get(APPLICATION_BASE_URL + 'filter-by-product-name/' + productName)
+        return axios.get(orderService.ORDER + `/filter-by-product-name/${productName}`)
     }
 
     filterByUserId(userId) {
-        return axios.get(APPLICATION_BASE_URL + 'filter-by-user-id/' + userId)
+        return axios.get(orderService.ORDER + `/filter-by-user-id/${userId}`)
     }
 
     getOrderById(orderId) {
-        return axios.get(APPLICATION_BASE_URL + 'get-order/' + orderId)
+        return axios.get(orderService.ORDER + `/get-order/${orderId}`)
     }
 
     filterByCurrentDate() {
-        return axios.get(APPLICATION_BASE_URL + 'filter-by-current-date')
+        return axios.get(orderService.ORDER + '/filter-by-current-date')
     }
 
 }

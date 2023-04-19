@@ -1,23 +1,22 @@
 import axios from "axios"
-
-const APPLICATION_BASE_URL = "http://localhost:9002/category/"
+import { productService } from "../constants"
 
 class CategoryService {
 
     saveCategory(category) {
-        return axios.post(APPLICATION_BASE_URL + 'save', category)
+        return axios.post(productService.CATEGORY + '/save', category)
     }
 
     updateCategory(categoryId, category) {
-        return axios.put(APPLICATION_BASE_URL + 'update/' + categoryId, category)
+        return axios.put(productService.CATEGORY + `/update/${categoryId}`)
     }
 
     getAllCategories() {
-        return axios.get(APPLICATION_BASE_URL)
+        return axios.get(productService.CATEGORY + '/')
     }
 
     deleteCategory(categoryId) {
-        return axios.delete(APPLICATION_BASE_URL + 'delete-category/' + categoryId)
+        return axios.delete(productService.CATEGORY + `/delete-category/${categoryId}`)
     }
 }
 export default new CategoryService()

@@ -1,27 +1,26 @@
 import axios from "axios"
-
-const APPLICATION_BASE_URL = 'http://localhost:9003/coupon/'
+import { cartService } from "../constants"
 
 class CouponService {
 
     createCoupon(coupon) {
-        return axios.post(APPLICATION_BASE_URL + 'create/', coupon)
+        return axios.post(cartService.COUPON + '/create', coupon)
     }
 
     getCoupon(couponId) {
-        return axios.get(APPLICATION_BASE_URL + 'get/' + couponId)
+        return axios.get(cartService.COUPON + `/get/${couponId}`)
     }
 
     updateCoupon(couponId, coupon) {
-        return axios.put(APPLICATION_BASE_URL + 'update/' + couponId, coupon)
+        return axios.put(cartService.COUPON + `/update/${couponId}`, coupon)
     }
 
     deleteCoupon(couponId) {
-        return axios.delete(APPLICATION_BASE_URL + 'delete/' + couponId)
+        return axios.delete(cartService.COUPON + `/delete/${couponId}`)
     }
 
     getAllCoupons() {
-        return axios.get(APPLICATION_BASE_URL)
+        return axios.get(cartService.COUPON + '/')
     }
 
 }
